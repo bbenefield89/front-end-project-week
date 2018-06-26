@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
+import axios from 'axios';
 
 // components
 import Sidebar from './sidebar/Sidebar';
@@ -21,7 +22,8 @@ class App extends Component {
     search: '',
     title: '',
     noteList: [],
-    showDeleteModal: false
+    showDeleteModal: false,
+    ajaxRequests: (process.env.NODE_ENV === 'development') ? 'http://localhost:5000' : 'http://64.190.90.127:5000'
   };
 
   // setInputVal
@@ -135,22 +137,27 @@ class App extends Component {
     );
   }
   
-  // adds data to `this.state.noteList`
-  // data currently comes from `/src/data.json`
+  // componentDidMount
   componentDidMount() {
-    const notesRef = firebase.database().ref('notes');
-    notesRef.on('value', snapshot => {
-      const noteList = [];
-      const snapshotVal = snapshot.val();
-      for (let note in snapshotVal) {
-        noteList.push({
-          id: note,
-          title: snapshotVal[note].title,
-          content: snapshotVal[note].content
-        });
-      }
-      this.setState({ noteList });
-    })
+    const { ajaxRequests } = this.state;
+    
+    axios(`${ ajaxRequests }/api/tasks`)
+      .then(({ data: notes }) => {
+        const noteList = [];
+
+        for (let note of notes) {
+          noteList.push({
+            id: note._id,
+            title: note.taskName,
+            content: note.taskDescription
+          });
+        }
+
+        this.setState({ noteList });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
   
   // render
