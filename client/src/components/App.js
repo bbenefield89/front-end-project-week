@@ -55,9 +55,21 @@ class App extends Component {
   // adds new note to `this.state.noteList`
   addNewNote = (e, props) => {
     e.preventDefault();
-    const { title, content } = this.state;
-    const notesRef = firebase.database().ref('notes');
-    notesRef.push({ title, content });
+    const { ajaxRequests, title: taskName, content: taskDescription } = this.state;
+    const method = 'post';
+    const url = `${ ajaxRequests }/api/tasks`;
+    const data = { taskName, taskDescription };
+    const request = { method, url, data };
+
+    axios(request)
+      .then(({ data }) => {
+        console.log(data);
+        this.getAllNotes();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    
     this.setState({ title: '', content: '' });
     props.history.push('/');
   }
