@@ -31,6 +31,27 @@ class App extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  // getAllNotes
+  getAllNotes = () => {
+    const { ajaxRequests } = this.state;
+    const url = `${ ajaxRequests }/api/tasks`;
+    
+    axios(url)
+      .then(({ data: notes }) => {
+        const noteList = [];
+
+        for (let note of notes) {
+          const { _id: id, taskName: title, taskDescription: content } = note;
+          noteList.push({ id, title, content });
+        }
+
+        this.setState({ noteList });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   // adds new note to `this.state.noteList`
   addNewNote = (e, props) => {
     e.preventDefault();
@@ -42,9 +63,22 @@ class App extends Component {
   }
 
   // setEditNoteValues
-  setEditNoteValues = (e, props, id, title, content) => {
+  setEditNoteValues = (e, props, id, taskName, taskDescription) => {
     e.preventDefault();
-    firebase.database().ref(`notes/${ id }`).set({ title, content });
+    const { ajaxRequests } = this.state;
+    const method = 'put';
+    const url = `${ ajaxRequests }/api/tasks/${ id }`;
+    const data = { taskName, taskDescription };
+    const request = { method, url, data };
+
+    axios(request)
+      .then(() => {
+        this.getAllNotes();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    
     props.history.push('/');
   }
 
@@ -139,25 +173,7 @@ class App extends Component {
   
   // componentDidMount
   componentDidMount() {
-    const { ajaxRequests } = this.state;
-    
-    axios(`${ ajaxRequests }/api/tasks`)
-      .then(({ data: notes }) => {
-        const noteList = [];
-
-        for (let note of notes) {
-          noteList.push({
-            id: note._id,
-            title: note.taskName,
-            content: note.taskDescription
-          });
-        }
-
-        this.setState({ noteList });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.getAllNotes();
   }
   
   // render

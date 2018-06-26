@@ -49,6 +49,7 @@ class NoteEdit extends React.Component {
               const { id } = note;
               const { title, content } = this.state;
               const { setInputVal, props } = this;
+              
               return (
                 <Form
                   key={ id }
