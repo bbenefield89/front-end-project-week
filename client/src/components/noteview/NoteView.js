@@ -6,7 +6,7 @@ import Note from './Note';
 // style
 import './NoteView.css';
 
-const NoteView = ({ noteList, setSelectedNote }) => {
+const NoteView = ({ noteList }) => {
   if (noteList.length > 0) {
     return (
       <div className='noteview__note-container'>
@@ -19,7 +19,6 @@ const NoteView = ({ noteList, setSelectedNote }) => {
                 ID={ id }
                 title={ title }
                 content={ content }
-                setSelectedNote={ setSelectedNote }
               />
             )
           })

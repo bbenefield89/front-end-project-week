@@ -21,9 +21,9 @@ class App extends Component {
     content: '',
     search: '',
     title: '',
-    noteList: [],
+    ajaxRequests: (process.env.NODE_ENV === 'development') ? 'http://localhost:5000' : 'http://64.190.90.127:5000',
     showDeleteModal: false,
-    ajaxRequests: (process.env.NODE_ENV === 'development') ? 'http://localhost:5000' : 'http://64.190.90.127:5000'
+    noteList: []
   };
 
   // setInputVal
@@ -106,7 +106,17 @@ class App extends Component {
 
   // handleDeleteNote
   handleDeleteNote = id => {
-    firebase.database().ref(`notes/${ id }`).remove()
+    // firebase.database().ref(`notes/${ id }`).remove()
+    console.log(id);
+    const { ajaxRequests } = this.state;
+    const method = 'delete';
+    const url = `${ ajaxRequests }/api/tasks/${ id }`;
+    const request = { method, url };
+
+    axios(request)
+      .then(() => this.getAllNotes())
+      .catch(err => console.log(err));
+    
     this.setShowDeleteModal();
   }
 
@@ -130,8 +140,8 @@ class App extends Component {
   *****************************************/
   // <NoteView />
   returnNoteView = props => {
-    const { handleSearchNotes, setSelectedNote } = this;
-    return <NoteView { ...props } noteList={ handleSearchNotes() } setSelectedNote={ setSelectedNote }/>;
+    const { handleSearchNotes } = this;
+    return <NoteView { ...props } noteList={ handleSearchNotes() } />;
   }
   
   // <Note />

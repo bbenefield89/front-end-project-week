@@ -48,7 +48,7 @@ const Note = props => {
         
         <DeleteModal
           showDeleteModal={ props.showDeleteModal }
-          handleDeleteNote={ () => props.handleDeleteNote(props.noteList[0].id) }
+          handleDeleteNote={ () => props.handleDeleteNote(props.match.params.id) }
           setShowDeleteModal={ () => props.setShowDeleteModal() }
         />
       </React.Fragment>
