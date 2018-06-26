@@ -71,7 +71,7 @@ class App extends Component {
       });
     
     this.setState({ title: '', content: '' });
-    props.history.push('/');
+    props.history.push('/note');
   }
 
   // setEditNoteValues
@@ -91,7 +91,7 @@ class App extends Component {
         console.log(err);
       });
     
-    props.history.push('/');
+    props.history.push('/note');
   }
 
   // setEditValues
@@ -106,8 +106,6 @@ class App extends Component {
 
   // handleDeleteNote
   handleDeleteNote = id => {
-    // firebase.database().ref(`notes/${ id }`).remove()
-    console.log(id);
     const { ajaxRequests } = this.state;
     const method = 'delete';
     const url = `${ ajaxRequests }/api/tasks/${ id }`;
@@ -202,11 +200,14 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Sidebar setInputVal={ this.setInputVal } search={ this.state.search } noteList={ this.handleSearchNotes() }/>
+        <Route
+          path='/note'
+          render={ () => <Sidebar setInputVal={ this.setInputVal } search={ this.state.search } noteList={ this.handleSearchNotes() }/> }
+        />
 
         {/* NoteView */}
         <Route
-          exact path='/'
+          exact path='/note'
           render={ props =>  this.returnNoteView(props) }
         />
         

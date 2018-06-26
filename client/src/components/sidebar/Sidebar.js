@@ -18,7 +18,7 @@ const Sidebar = props => {
 
       <ul className='navigation__button-container'>
         <li>
-          <Link to='/'>
+          <Link to='/note'>
             <Button
               buttonContent='View Your Notes'
               buttonClassName='button button-container__view-notes-button'
