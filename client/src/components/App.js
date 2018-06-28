@@ -3,6 +3,7 @@ import { Route } from 'react-router';
 import axios from 'axios';
 
 // components
+import RegistrationContainer from './registration/RegistrationContainer';
 import Sidebar from './sidebar/Sidebar';
 import NoteView from './noteview/NoteView';
 import NewNote from './newnote/NewNote';
@@ -193,13 +194,17 @@ class App extends Component {
   
   // componentDidMount
   componentDidMount() {
-    this.getAllNotes();
+    // this.getAllNotes();
   }
   
   // render
   render() {
     return (
       <div className="App">
+        {/* RegistrationContainer */}
+        <Route exact path='/' component={ RegistrationContainer } />
+      
+        {/* Sidebar */}
         <Route
           path='/note'
           render={ () => <Sidebar setInputVal={ this.setInputVal } search={ this.state.search } noteList={ this.handleSearchNotes() }/> }
