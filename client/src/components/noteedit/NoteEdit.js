@@ -25,12 +25,11 @@ class NoteEdit extends React.Component {
       if (nextProps.match.params.id === note.id) {
         const title = prevState.title ? prevState.title : note.title;
         const content = prevState.content ? prevState.content : note.content;
-        return {
-          title,
-          content,
-        };
+
+        return { title, content };
       }
     }
+    
     return null;
   }
   

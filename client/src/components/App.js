@@ -86,9 +86,10 @@ class App extends Component {
   setEditNoteValues = (e, props, id, taskName, taskDescription) => {
     e.preventDefault();
     const { ajaxRequests } = this.state;
+    const token = localStorage.getItem('token');
     const method = 'put';
     const url = `${ ajaxRequests }/api/tasks/${ id }`;
-    const data = { taskName, taskDescription };
+    const data = { taskName, taskDescription, token };
     const request = { method, url, data };
 
     axios(request)
@@ -115,9 +116,11 @@ class App extends Component {
   // handleDeleteNote
   handleDeleteNote = id => {
     const { ajaxRequests } = this.state;
+    const token = localStorage.getItem('token');
     const method = 'delete';
     const url = `${ ajaxRequests }/api/tasks/${ id }`;
-    const request = { method, url };
+    const data = { token };
+    const request = { method, url, data };
 
     axios(request)
       .then(() => this.getAllNotes())
