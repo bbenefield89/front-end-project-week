@@ -14,7 +14,6 @@ import NoteEdit from './noteedit/NoteEdit';
 import './App.css';
 
 // database
-import firebase from '../firebase';
 import 'firebase/database';
 
 class App extends Component {
@@ -149,8 +148,8 @@ class App extends Component {
   *****************************************/
   // <NoteView />
   returnNoteView = props => {
-    const { handleSearchNotes } = this;
-    return <NoteView { ...props } noteList={ handleSearchNotes() } />;
+    const { handleSearchNotes, getAllNotes } = this;
+    return <NoteView { ...props } noteList={ handleSearchNotes() } getAllNotes={ getAllNotes() } />;
   }
   
   // <Note />
@@ -200,11 +199,6 @@ class App extends Component {
         buttonOnClick={ setEditNoteValues }
       />
     );
-  }
-  
-  // componentDidMount
-  componentDidMount() {
-    this.getAllNotes();
   }
   
   // render
