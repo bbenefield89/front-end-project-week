@@ -10,7 +10,12 @@ class RegistrationContainer extends Component {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      registering: true,
+      registerHeaderText: 'Register for a new account with Lambda Notes',
+      registerButtonText: 'Register for a new account',
+      loginHeaderText: 'Log in to Lambda Notes with an existing account',
+      loginButtonText: 'Log in with an existing account'
     };
   }
   
@@ -39,43 +44,107 @@ class RegistrationContainer extends Component {
       })
       .catch(err => console.log(err));
   }
+
+  // handleUserLogin
+  handleUserLogin = async e => {
+    e.preventDefault();
+
+    const { username, password } = this.state;
+    const request = {
+      method  : 'post',
+      url     : 'http://localhost:5000/registration/login',
+      data    : { username, password }
+    };
+
+    try {
+      const { history } = this.props;
+      const { data: { token } } = await axios(request);
+      
+      localStorage.setItem('token', token)
+      history.push('/note');
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
+  // sendUserSubmittedForm
+  sendUserSubmittedForm = async e => {
+    const { registering } = this.state;
+    const { handleUserRegistration, handleUserLogin } = this;
+
+    (registering) ? handleUserRegistration(e) : handleUserLogin(e);
+  }
+
+  // swapRegisteringValue
+  swapRegisteringValue = () => {
+    const { registering } = this.state;
+
+    this.setState({
+      registering: !registering
+    });
+  }
+
+  headerText = () => {
+    const { registering, registerHeaderText, loginHeaderText } = this.state;
+    return (registering) ? registerHeaderText : loginHeaderText;
+  }
+
+  setRegisterOrLoginButtonText = () => {
+    const { registering, registerButtonText, loginButtonText  } = this.state;
+    return (registering) ? loginButtonText : registerButtonText;
+  }
   
   render() {
     const {
-      handleUserRegistration,
+      sendUserSubmittedForm,
       setInputValue,
+      swapRegisteringValue,
+      headerText,
+      setRegisterOrLoginButtonText,
       state: {
         inputValue,
       }
     } = this;
     
     return (
-      <Form formAutoComplete='off'>
-        <TextField
-          inputName='username'
-          inputOnChange={ setInputValue }
-          inputPlaceholder='Username'
-          inputType='text'
-          inputValue={ inputValue }
-          variant='input'
-        />
+      <React.Fragment>
+        <h1>{ headerText() }</h1>
 
-        <TextField
-          inputName='password'
-          inputOnChange={ setInputValue }
-          inputPlaceholder='Password'
-          inputType='password'
-          inputValue={ inputValue }
-          variant='input'
-        />
+        <Form formAutoComplete='off'>
+          <TextField
+            inputName='username'
+            inputOnChange={ setInputValue }
+            inputPlaceholder='Username'
+            inputType='text'
+            inputValue={ inputValue }
+            variant='input'
+          />
+
+          <TextField
+            inputName='password'
+            inputOnChange={ setInputValue }
+            inputPlaceholder='Password'
+            inputType='password'
+            inputValue={ inputValue }
+            variant='input'
+          />
+
+          <Button
+            buttonClassName='button'
+            buttonOnClick={ sendUserSubmittedForm }
+            buttonContent='Register'
+            buttonType='submit'
+          />
+        </Form>
 
         <Button
           buttonClassName='button'
-          buttonOnClick={ e => handleUserRegistration(e) }
-          buttonContent='Register'
-          buttonType='submit'
+          buttonOnClick={ swapRegisteringValue }
+          buttonContent={ setRegisterOrLoginButtonText() }
+          buttonType='button'
         />
-      </Form>
+      </React.Fragment>
     )
   }
 }
