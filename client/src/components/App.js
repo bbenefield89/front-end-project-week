@@ -35,14 +35,20 @@ class App extends Component {
   // getAllNotes
   getAllNotes = () => {
     const { ajaxRequests } = this.state;
-    const url = `${ ajaxRequests }/api/tasks`;
+    const token = localStorage.getItem('token');
+    const request = {
+      method: 'post',
+      url: `${ ajaxRequests }/api/tasks`,
+      headers: { 'Content-Type': 'application/json' },
+      data: { token }
+    }
     
-    axios(url)
-      .then(({ data: notes }) => {
+    axios(request)
+      .then(({ data: tasks }) => {
         const noteList = [];
 
-        for (let note of notes) {
-          const { _id: id, taskName: title, taskDescription: content } = note;
+        for (let task of tasks) {
+          const { _id: id, taskName: title, taskDescription: content } = task;
           noteList.push({ id, title, content });
         }
 
@@ -57,9 +63,10 @@ class App extends Component {
   addNewNote = (e, props) => {
     e.preventDefault();
     const { ajaxRequests, title: taskName, content: taskDescription } = this.state;
+    const token = localStorage.getItem('token');
     const method = 'post';
-    const url = `${ ajaxRequests }/api/tasks`;
-    const data = { taskName, taskDescription };
+    const url = `${ ajaxRequests }/api/tasks/new`;
+    const data = { taskName, taskDescription, token };
     const request = { method, url, data };
 
     axios(request)
@@ -194,7 +201,7 @@ class App extends Component {
   
   // componentDidMount
   componentDidMount() {
-    // this.getAllNotes();
+    this.getAllNotes();
   }
   
   // render

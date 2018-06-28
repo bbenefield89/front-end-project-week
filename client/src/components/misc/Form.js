@@ -35,7 +35,7 @@ const Form = props => {
           />
         </div>
 
-        <div>•••
+        <div>
           <TextField
             textareaClassName={ textareaClassName }
             textareaContent={ content }
