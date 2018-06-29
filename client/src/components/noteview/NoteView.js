@@ -6,7 +6,13 @@ import Note from './Note';
 // style
 import './NoteView.css';
 
-const NoteView = ({ noteList }) => {
+const NoteView = props => {
+  const { noteList } = props;
+  const token = localStorage.getItem('token');
+
+  if (!token)
+    props.history.push('/');
+  
   if (noteList.length > 0) {
     return (
       <div className='noteview__note-container'>
