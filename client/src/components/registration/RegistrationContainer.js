@@ -94,6 +94,23 @@ class RegistrationContainer extends Component {
     const { registering, registerButtonText, loginButtonText  } = this.state;
     return (registering) ? loginButtonText : registerButtonText;
   }
+
+  componentDidMount() {
+    const { history } = this.props;
+    const token = localStorage.getItem('token');
+    const request = {
+      method: 'get',
+      url: `http://localhost:5000/api/users/${ token }`
+    }
+    
+    axios(request)
+      .then(({ data }) => {
+        if (data.user) history.push('/note');
+      })
+      .catch(err => {
+        return;
+      });
+  }
   
   render() {
     const {

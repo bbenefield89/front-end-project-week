@@ -54,7 +54,7 @@ class App extends Component {
         this.setState({ noteList });
       })
       .catch(err => {
-        console.log(err);
+        return;
       });
   }
 
