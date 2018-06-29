@@ -10,6 +10,10 @@ import TextField from '../misc/TextField';
 import './Sidebar.css';
 
 const Sidebar = props => {
+  const userLogOut = () => {
+    localStorage.removeItem('token');
+  }
+  
   return (
     <nav className='navigation'>
       <div className='navigation__logo'>
@@ -55,6 +59,11 @@ const Sidebar = props => {
             inputVal={ props.search }
           />
         </li>
+
+        <li>
+          <button onClick={ userLogOut }>Log out</button>
+        </li>
+        
       </ul>
     </nav>
   )
