@@ -100,12 +100,14 @@ class RegistrationContainer extends Component {
     const token = localStorage.getItem('token');
     const request = {
       method: 'get',
-      url: `http://localhost:5000/api/users/${ token }`
+      url: `${process.env.REACT_APP_API_URL}/api/users/${ token }`
     }
     
     axios(request)
       .then(({ data }) => {
         if (data.user) history.push('/note');
+
+        return;
       })
       .catch(err => {
         return;

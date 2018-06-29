@@ -37,7 +37,8 @@ class App extends Component {
     const token = localStorage.getItem('token');
     const request = {
       method: 'post',
-      url: `${ ajaxRequests }/api/tasks`,
+      // url: `${ ajaxRequests }/api/tasks`,
+      url: `${ process.env.REACT_APP_API_URL }/api/tasks`,
       headers: { 'Content-Type': 'application/json' },
       data: { token }
     }
